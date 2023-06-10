@@ -18,9 +18,10 @@ model User {
   email String @unique
   hash String
 
-  fullNmae String
-  account Int
-  pin Int
+  fullName String?
+  account Int?
+  pin Int?
+  signOut Boolean?
 
   Accounts Account[]
   Transactions Transaction[]

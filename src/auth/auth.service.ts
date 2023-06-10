@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { User, Transaction, Account, Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { AuthDto } from "./dto";
@@ -6,6 +6,8 @@ import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import { Session } from "express-session";
+
 
 @Injectable()
 export class AuthService{
@@ -25,9 +27,6 @@ export class AuthService{
                 data: {
                     email: dto.email,
                     hash,
-                    fullNmae: dto.fullNmae,
-                    account: dto.account,
-                    pin: dto.pin,
                 },
             });
             return this.signToken(user.id, user.email);
@@ -91,4 +90,33 @@ export class AuthService{
                 access_token: token,
             }
         }
+       
+        
+        
+        async logout(userId: number, session: Session) {
+            try {
+              session.destroy((error) => {
+                if (error) {
+                  throw new Error('Session could not be destroyed');
+                }
+              });
+          
+              await this.prisma.user.update({
+                where: {
+                  id: userId,
+                  
+                },
+                data: {
+                  signOut: true,
+                } as Prisma.UserUpdateInput
+              });
+          
+              return {
+                message: 'Logout successful',
+              };
+          
+            } catch (error) {
+              throw new NotFoundException('Logout failed');
+            }
+          }
 }

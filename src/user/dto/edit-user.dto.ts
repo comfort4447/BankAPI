@@ -3,17 +3,17 @@ import { IsEmail, IsNumber, IsOptional, IsString } from "class-validator";
 export class EditUserDto {
     @IsEmail()
     @IsOptional()
-    email?: string
+    email: string
 
-    @IsString()
-    @IsOptional()
-    fullNmae?: string;
+    // @IsString()
+    // @IsOptional()
+    // fullName?: string;
 
-    @IsNumber()
-    @IsOptional()
-    pin?: number
+    // @IsNumber()
+    // @IsOptional()
+    // pin?: number
 
-    @IsNumber()
-    @IsOptional()
-    account?: number
+    // @IsNumber()
+    // @IsOptional()
+    // account?: number
 }

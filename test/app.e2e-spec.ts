@@ -24,11 +24,11 @@ describe('App e2e', () => {
     }) 
     );
     await app.init()
-    await app.listen(3344);
+    await app.listen(3367);
 
     prisma = app.get(PrismaService)
     await prisma.cleanDb()
-    pactum.request.setBaseUrl('http://localhost:3344')
+    pactum.request.setBaseUrl('http://localhost:3367')
   });
 
   afterAll(() => {
@@ -39,9 +39,9 @@ describe('App e2e', () => {
     const dto: AuthDto = {
       email: 'tayoabisola444@piis.pcebs.com',
       password: 'password123',
-      fullNmae: 'Abisola',
-      account: 1234567890,
-      pin: 1234,
+      // fullName: 'Abisola',
+      // account: 1234567890,
+      // pin: 1234,
     }
 
     describe('Signup', () => {
@@ -52,8 +52,8 @@ describe('App e2e', () => {
           '/auth/signup',
         ).withBody({
           email: dto.email,
-          pin: dto.pin,
-          fullNmae: dto.fullNmae
+          // pin: dto.pin,
+          // fullName: dto.fullName
         })
         .expectStatus(400)
       })
@@ -64,8 +64,8 @@ describe('App e2e', () => {
           '/auth/signup',
         ).withBody({
           password: dto.password,
-          pin: dto.pin,
-          fullNmae: dto.fullNmae
+          // pin: dto.pin,
+          // fullName: dto.fullName
         })
         .expectStatus(400)
       })
@@ -88,8 +88,8 @@ describe('App e2e', () => {
           '/auth/signin',
         ).withBody({
           email: dto.email,
-          pin: dto.pin,
-          fullNmae: dto.fullNmae
+          // pin: dto.pin,
+          // fullName: dto.fullName
         })
         .expectStatus(400)
       })
@@ -100,8 +100,8 @@ describe('App e2e', () => {
           '/auth/signin',
         ).withBody({
           password: dto.password,
-          pin: dto.pin,
-          fullNmae: dto.fullNmae
+          // pin: dto.pin,
+          // fullName: dto.fullName
         })
         .expectStatus(400)
       })
@@ -134,10 +134,10 @@ describe('App e2e', () => {
     describe('Edit user', () => {
       it('should edit users', () => {
         const dto: EditUserDto = {
-          fullNmae: "Tolulope",
+          // fullName: "Tolulope",
           email: "tayoabisola44@gmail.com",
-          pin: 9094,
-          account: 122844480,
+          // pin: 9094,
+          // account: 122844480,
         }
         return pactum
         .spec()
@@ -154,10 +154,10 @@ describe('App e2e', () => {
     describe('Delete user', () => {
       it('should delete user', () => {
         const dto: EditUserDto = {
-          fullNmae: "Tolulope",
+          // fullName: "Tolulope",
           email: "tayoabisola44@gmail.com",
-          pin: 9094,
-          account: 122844480,
+          // pin: 9094,
+          // account: 122844480,
         }
         return pactum
         .spec()
