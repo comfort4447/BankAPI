@@ -19,12 +19,9 @@ model User {
   hash String
 
   fullName String?
-  account Int?
-  pin Int?
-  signOut Boolean?
 
   Accounts Account[]
-  Transactions Transaction[]
+  
 
   @@map("users")
 }
@@ -40,6 +37,8 @@ model Account {
   userId Int 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  Transactions Transaction[]
+
   @@map("Accounts")
 }
 
@@ -49,8 +48,8 @@ model Transaction {
   updatedAt DateTime @updatedAt
 
 
-  userId Int 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  AccountId Int 
+  account Account @relation(fields: [AccountId], references: [id], onDelete: Cascade)
 
   @@map("Transactions")
 }
