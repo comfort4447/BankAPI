@@ -33,6 +33,7 @@ model Account {
 
   fullName String
   account_Number Int
+  pin Int
 
   userId Int 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
