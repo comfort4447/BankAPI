@@ -31,9 +31,10 @@ model Account {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  fullName String
+  AccountName String
   account_Number Int
   pin Int
+  balance Float
 
   userId Int 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -47,6 +48,13 @@ model Transaction {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+
+  amount Float
+  type_of_transaction String
+  receiver Int
+  sender String
+  status String
 
 
   AccountId Int 

@@ -33,7 +33,7 @@ export class UserController {
           };
         }
 
-    @Patch()
+    @Patch('update')
     editUser(
         @GetUser('id') 
         userId: number, 
@@ -42,7 +42,7 @@ export class UserController {
             return this.userService.editUser(userId, dto);
         } 
 
-    @Delete()
+    @Delete('remove')
     deleteUser(
         @GetUser('id')
         userId: number,

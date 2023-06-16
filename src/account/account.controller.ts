@@ -12,8 +12,8 @@ import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { Accountservice } from './account.service';
 import { 
-    CreateAccountDto, 
-    EditAccountDto 
+    CreateAccountDto,
+    EditAccountDto
 } from './dto';
 
 @UseGuards(JwtGuard)
@@ -24,7 +24,7 @@ export class AccountController {
     ) {}
 
 
-@Get()
+@Get('account')
 getAccounts(
     @GetUser('id') userId: number
     ) {
@@ -36,15 +36,16 @@ getAccounts(
 @Get(':id')
 getAccountsById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe)  accountId: number 
+    @Param('id', ParseIntPipe)  accountId: number, account_Number: number 
     ) {
         return this.Accountservice.getAccountById(
             userId,
             accountId,
+            account_Number
         );
     }
 
-@Post()
+@Post('addAccount')
 createAccount(
     @GetUser('id') userId: number, 
     @Body() dto: CreateAccountDto,

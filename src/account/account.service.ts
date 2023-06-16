@@ -18,7 +18,8 @@ getAccounts(
 
 getAccountById(
     userId: number, 
-    accountId: number
+    accountId: number,
+    account_Number: number
     ) {}
 
 editAccountById(
