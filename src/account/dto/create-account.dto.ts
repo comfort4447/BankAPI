@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator"
 export class CreateAccountDto {
     @IsString()
     @IsNotEmpty()
-    fullName: string
+    AccountName: string
 
     @IsNumber()
     @IsNotEmpty()
@@ -12,4 +12,8 @@ export class CreateAccountDto {
     @IsNumber()
     @IsNotEmpty()
     pin: number
+
+    @IsNumber()
+    @IsNotEmpty()
+    balance: number
 }

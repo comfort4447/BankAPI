@@ -1,7 +1,10 @@
 import { 
     Body,
     Controller, 
+    Delete, 
     Get, 
+    HttpCode, 
+    HttpStatus, 
     Param, 
     ParseIntPipe, 
     Patch, 
@@ -24,7 +27,7 @@ export class AccountController {
     ) {}
 
 
-@Get('account')
+@Get()
 getAccounts(
     @GetUser('id') userId: number
     ) {
@@ -41,7 +44,6 @@ getAccountsById(
         return this.Accountservice.getAccountById(
             userId,
             accountId,
-            account_Number
         );
     }
 
@@ -69,4 +71,17 @@ editAccountById(
             dto,
         );
     }
+
+@HttpCode(HttpStatus.NO_CONTENT)
+@Delete(':id')
+deleteAccountById(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) accountId: number,
+){
+    return this.Accountservice.deleteAccountById(
+        userId, 
+        accountId
+    );
+}
+
 }
