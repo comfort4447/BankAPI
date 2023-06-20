@@ -91,7 +91,7 @@ async sendMoney(
   @Param('balance', ParseIntPipe) balance: number,
   @Body() dto: EditAccountDto,
 ) {
-  const amount = dto.balance; // Assuming the balance from the DTO represents the amount to be sent
+  const amount = dto.balance; 
 
   const result = await this.Accountservice.sendMoney(
     account_Number,
@@ -107,12 +107,4 @@ async sendMoney(
     receiverAccount: result.receiverAccount,
   };
 }
-
-
-
-
-
-
-
-
 }
