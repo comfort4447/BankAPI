@@ -10,6 +10,11 @@ export class SendTransactionDto {
     @IsNotEmpty()
     @IsOptional()
     receiver?: number
+
+    @IsNumber()
+    @IsNotEmpty()
+    @IsOptional()
+    balance?: number
     
     @IsString()
     @IsNotEmpty()

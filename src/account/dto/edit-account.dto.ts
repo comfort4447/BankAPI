@@ -3,7 +3,7 @@ import { IsNumber, IsOptional, IsString } from "class-validator"
 export class EditAccountDto {
     @IsString()
     @IsOptional()
-    fullName?: string
+    AccountName?: string
 
     @IsNumber()
     @IsOptional()
@@ -12,4 +12,8 @@ export class EditAccountDto {
     @IsNumber()
     @IsOptional()
     pin?: number
+
+    @IsNumber()
+    @IsOptional()
+    balance?: number
 }

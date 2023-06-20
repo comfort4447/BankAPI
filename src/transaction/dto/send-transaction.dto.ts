@@ -8,6 +8,10 @@ export class SendTransactionDto {
     @IsNumber()
     @IsNotEmpty()
     receiver: number
+
+    @IsNumber()
+    @IsNotEmpty()
+    balance: number
     
     @IsString()
     @IsNotEmpty()

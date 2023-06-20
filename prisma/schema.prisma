@@ -34,7 +34,7 @@ model Account {
   AccountName String
   account_Number Int
   pin Int
-  balance Float
+  balance Int
 
   userId Int 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -55,6 +55,7 @@ model Transaction {
   receiver Int
   sender String
   status Status 
+  balance Int
 
 
   AccountId Int 

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { 
     CreateAccountDto, 
@@ -21,6 +21,7 @@ async createAccount(
         });
         return account;
     }
+
 
 getAccounts(
     userId: number
@@ -52,7 +53,79 @@ getAccountByAccountNumber(
                 },
             });
         }
-
+async sendMoney(
+    account_Number: number,
+    receiver: number,
+    amount: number,
+    balance: number,
+    dto: EditAccountDto,
+        ) {
+            const senderAccount = await this.prisma.account.findUnique({
+              where: {
+                id: account_Number,
+              },
+            });
+        
+            const receiverAccount = await this.prisma.account.findUnique({
+              where: {
+                id: receiver,
+              },
+            });
+        
+            if (!senderAccount || !receiverAccount) {
+              throw new NotFoundException('Account not found');
+            }
+        
+            if (senderAccount.balance < amount) {
+              throw new ForbiddenException('Insufficient balance');
+            }
+        
+            // Deduct the amount from the sender's account balance
+            const updatedSenderAccount = await this.prisma.account.update({
+              where: {
+                id: account_Number,
+              },
+              data: {
+                balance: senderAccount.balance - amount,
+              },
+            });
+        
+            // Update the receiver's account balance
+            const updatedReceiverAccount = await this.prisma.account.update({
+              where: {
+                id: receiver,
+              },
+              data: {
+                balance: receiverAccount.balance + amount,
+              },
+            });
+        
+            // Update other fields of the accounts if provided in the DTO
+            if (dto) {
+              await this.prisma.account.update({
+                where: {
+                  id: account_Number,
+                },
+                data: {
+                  ...dto,
+                },
+              });
+        
+              await this.prisma.account.update({
+                where: {
+                  id: receiver,
+                },
+                data: {
+                  ...dto,
+                },
+              });
+            }
+        
+            return {
+              senderAccount: updatedSenderAccount,
+              receiverAccount: updatedReceiverAccount,
+            };
+          }
  async editAccountById(
     userId: number, 
     AccountId: number,
