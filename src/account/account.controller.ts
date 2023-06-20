@@ -84,4 +84,35 @@ deleteAccountById(
     );
 }
 
+@Post(':senderAccountId/send-money/:receiverAccountId')
+async sendMoney(
+  @Param('account_Number', ParseIntPipe) account_Number: number,
+  @Param('receiver', ParseIntPipe) receiver: number,
+  @Param('balance', ParseIntPipe) balance: number,
+  @Body() dto: EditAccountDto,
+) {
+  const amount = dto.balance; // Assuming the balance from the DTO represents the amount to be sent
+
+  const result = await this.Accountservice.sendMoney(
+    account_Number,
+    receiver,
+    amount,
+    balance,
+    dto,
+  );
+
+  return {
+    message: 'Money sent successfully',
+    senderAccount: result.senderAccount,
+    receiverAccount: result.receiverAccount,
+  };
+}
+
+
+
+
+
+
+
+
 }
