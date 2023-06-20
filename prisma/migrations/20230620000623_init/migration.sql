@@ -1,3 +1,9 @@
+-- CreateEnum
+CREATE TYPE "TypeOfTransaction" AS ENUM ('Deposit', 'Withdraw', 'Send');
+
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('pending', 'successful', 'failed');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
@@ -15,7 +21,7 @@ CREATE TABLE "Accounts" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "fullName" TEXT NOT NULL,
+    "AccountName" TEXT NOT NULL,
     "account_Number" INTEGER NOT NULL,
     "pin" INTEGER NOT NULL,
     "balance" DOUBLE PRECISION NOT NULL,
@@ -29,10 +35,11 @@ CREATE TABLE "Transactions" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "amount" DOUBLE PRECISION NOT NULL,
-    "type_of_transaction" TEXT NOT NULL,
-    "receiver" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "type_of_transaction" "TypeOfTransaction" NOT NULL,
+    "receiver" INTEGER NOT NULL,
+    "sender" TEXT NOT NULL,
+    "status" "Status" NOT NULL,
     "AccountId" INTEGER NOT NULL,
 
     CONSTRAINT "Transactions_pkey" PRIMARY KEY ("id")

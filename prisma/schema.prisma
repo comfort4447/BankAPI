@@ -50,15 +50,27 @@ model Transaction {
   updatedAt DateTime @updatedAt
 
 
-  amount Float
-  type_of_transaction String
+  amount Int
+  type_of_transaction TypeOfTransaction
   receiver Int
   sender String
-  status String
+  status Status 
 
 
   AccountId Int 
   account Account @relation(fields: [AccountId], references: [id], onDelete: Cascade)
 
   @@map("Transactions")
+}
+
+enum TypeOfTransaction {
+  Deposit
+  Withdraw
+  Send
+}
+
+enum Status {
+  pending
+  successful
+  failed
 }

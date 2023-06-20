@@ -3,21 +3,26 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator"
 export class SendTransactionDto {
     @IsNumber()
     @IsNotEmpty()
-    amount: number
+    @IsOptional()
+    amount?: number
 
     @IsNumber()
     @IsNotEmpty()
-    receiver: number
+    @IsOptional()
+    receiver?: number
     
     @IsString()
     @IsNotEmpty()
-    sender: string
+    @IsOptional()
+    sender?: string
 
     @IsString()
     @IsNotEmpty()
-    status: string
+    @IsOptional()
+    status?: string
 
     @IsString()
     @IsNotEmpty()
-    type_of_transaction: string
+    @IsOptional()
+    type_of_transaction?: ['Deposit', 'Withdraw', 'send']
 }

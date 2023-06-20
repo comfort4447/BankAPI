@@ -39,11 +39,11 @@ getAccounts(
 @Get(':id')
 getAccountsById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe)  accountId: number, account_Number: number 
+    @Param('id', ParseIntPipe)  AccountId: number, account_Number: number 
     ) {
         return this.Accountservice.getAccountById(
             userId,
-            accountId,
+            AccountId,
         );
     }
 
@@ -62,12 +62,12 @@ createAccount(
 @Patch(':id') 
 editAccountById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) accountId: number,
+    @Param('id', ParseIntPipe) AccountId: number,
     @Body() dto: EditAccountDto,
     ) {
         return this.Accountservice.editAccountById(
             userId,
-            accountId,
+            AccountId,
             dto,
         );
     }
@@ -76,11 +76,11 @@ editAccountById(
 @Delete(':id')
 deleteAccountById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) accountId: number,
+    @Param('id', ParseIntPipe) AccountId: number,
 ){
     return this.Accountservice.deleteAccountById(
         userId, 
-        accountId
+        AccountId
     );
 }
 

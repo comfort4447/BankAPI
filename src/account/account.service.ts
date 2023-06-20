@@ -34,11 +34,11 @@ getAccounts(
 
 getAccountById(
     userId: number, 
-    accountId: number,
+    AccountId: number,
     ) {
         return this.prisma.account.findFirst({
             where: {
-                id: accountId,
+                id: AccountId,
                 userId,
             },
         });
@@ -55,12 +55,12 @@ getAccountByAccountNumber(
 
  async editAccountById(
     userId: number, 
-    accountId: number,
+    AccountId: number,
     dto: EditAccountDto, 
     ) {
         const account = await this.prisma.account.findUnique({
             where: {
-                id: accountId,
+                id: AccountId,
             },
         });
         if (!account || account.userId !== userId)
@@ -69,7 +69,7 @@ getAccountByAccountNumber(
         );
         return this.prisma.account.update({
             where: {
-                id: accountId,
+                id: AccountId,
             },
             data: {
                 ...dto,
@@ -79,11 +79,11 @@ getAccountByAccountNumber(
 
     async deleteAccountById(
         userId: number,
-        accountId: number,
+        AccountId: number,
     ){
         const account = await this.prisma.account.findUnique({
             where: {
-                id: accountId,
+                id: AccountId,
             },
         });
         if(!account || account.userId !== userId)
@@ -92,7 +92,7 @@ getAccountByAccountNumber(
         );
         await this.prisma.account.delete({
             where: {
-                id: accountId,
+                id: AccountId,
             }
         })
     }

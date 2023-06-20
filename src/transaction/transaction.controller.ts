@@ -29,39 +29,39 @@ getTransactionsById(
         transactionId,
     );
 }
-// @Post(':id')
-// createTransaction(
-//     @GetUser('id') AccountId: number,
-//     @Body() dto: SendTransactionDto,
-// ){
-//     return this.TransactionService.createTransacrion{
-//         AccountId,
-//         dto,
-//     }
-// }
+@Post(':id')
+createTransaction(
+    @GetUser('id') AccountId: number,
+    @Body() dto: SendTransactionDto,
+){
+    return this.TransactionService.createTransaction(
+        AccountId,
+        dto,
+    )
+}
 
-// @Patch(':id')
-// editAccountById(
-//     @GetUser('id') userId: number,
-//     @Param('id', ParseIntPipe) accountId: number,
-//     @Body() dto: SendTransactionDto,
-//     ) {
-//         return this.TransactionService.editTransactionById(
-//             userId,
-//             accountId,
-//             dto,
-//         );
-//     }
+@Patch(':id')
+editTransactionById(
+    @GetUser('id') userId: number,
+    @Param('id', ParseIntPipe) AccountId: number,
+    @Body() dto: SendTransactionDto,
+    ) {
+        return this.TransactionService.editTransactionById(
+            userId,
+            AccountId,
+            dto,
+        );
+    }
 
 @HttpCode(HttpStatus.NO_CONTENT)
 @Delete(':id')
 deleteAccountById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) accountId: number,
+    @Param('id', ParseIntPipe) AccountId: number,
 ){
     return this.TransactionService.deleteTransactionById(
         userId, 
-        accountId
+        AccountId
     );
 }
 }

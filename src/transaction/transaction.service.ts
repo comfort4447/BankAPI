@@ -1,5 +1,4 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { CreateAccountDto } from 'src/account/dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { SendTransactionDto } from './dto/send-transaction.dto';
 
@@ -7,18 +6,18 @@ import { SendTransactionDto } from './dto/send-transaction.dto';
 export class TransactionService {
   constructor(private prisma: PrismaService) {}
 
-  // async createTransacrion(
-  //   AccountId: number,
-  //   dto: SendTransactionDto
-  // ){
-  //   const transaction = await this.prisma.transaction.create({
-  //     data: {
-  //       AccountId,
-  //       ...dto,
-  //     }
-  //   })
-  //   return transaction;
-  // }
+  async createTransaction(
+    AccountId: number,
+    dto: SendTransactionDto
+  ) {
+    const transaction = await this.prisma.transaction.create({
+      data: {
+        AccountId,
+        ...dto,
+      },
+    });
+    return transaction;
+  }
 
   getTransactions(
     AccountId: number
@@ -42,29 +41,29 @@ export class TransactionService {
     });
   }
 
-  // async editTransactionById(
-  //   AccountId: number,
-  //   transactionId: number,
-  //   dto: SendTransactionDto,
-  // ) {
-  //   const transaction = await this.prisma.transaction.findUnique({
-  //     where: {
-  //       id: transactionId,
-  //     },
-  //   });
-  //   if(!transaction || transaction.AccountId !== AccountId)
-  //   throw new ForbiddenException(
-  //     'Access to resources denied',
-  //   );
-  //   return this.prisma.transaction.update({
-  //     where: {
-  //       id: transactionId,
-  //     },
-  //     data: {
-  //       ...dto,
-  //     },
-  //   });
-  // }
+  async editTransactionById(
+    AccountId: number,
+    transactionId: number,
+    dto: SendTransactionDto,
+  ) {
+    const transaction = await this.prisma.transaction.findUnique({
+      where: {
+        id: transactionId,
+      },
+    });
+    if(!transaction || transaction.AccountId !== AccountId)
+    throw new ForbiddenException(
+      'Access to resources denied',
+    );
+    return this.prisma.transaction.update({
+      where: {
+        id: transactionId,
+      },
+      data: {
+        ...dto,
+      },
+    });
+  }
   async deleteTransactionById(
     AccountId: number,
     transactionId: number,
