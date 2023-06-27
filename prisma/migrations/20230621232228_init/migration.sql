@@ -24,7 +24,7 @@ CREATE TABLE "Accounts" (
     "AccountName" TEXT NOT NULL,
     "account_Number" INTEGER NOT NULL,
     "pin" INTEGER NOT NULL,
-    "balance" DOUBLE PRECISION NOT NULL,
+    "balance" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Accounts_pkey" PRIMARY KEY ("id")
@@ -38,8 +38,9 @@ CREATE TABLE "Transactions" (
     "amount" INTEGER NOT NULL,
     "type_of_transaction" "TypeOfTransaction" NOT NULL,
     "receiver" INTEGER NOT NULL,
-    "sender" TEXT NOT NULL,
+    "sender" INTEGER NOT NULL,
     "status" "Status" NOT NULL,
+    "balance" INTEGER NOT NULL,
     "AccountId" INTEGER NOT NULL,
 
     CONSTRAINT "Transactions_pkey" PRIMARY KEY ("id")

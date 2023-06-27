@@ -1,13 +1,22 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { Status, TypeOfTransaction } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Transaction } from '@prisma/client';
+import { TransactionService } from 'src/transaction/transaction.service';
+import { UpdateTransactionDto } from 'src/transaction/dto/update-transaction.dto';
+
 import { 
     CreateAccountDto, 
-    EditAccountDto 
+    EditAccountDto, 
 } from './dto';
+import { SendTransactionDto } from 'src/transaction/dto/send-transaction.dto';
 
 @Injectable()
 export class Accountservice {
-    constructor(private prisma: PrismaService){}
+    constructor(private prisma: PrismaService,
+      private transactionService: TransactionService
+      ){}
+    
     
 async createAccount(
     userId: number, 
@@ -44,6 +53,7 @@ getAccountById(
             },
         });
     }
+
 getAccountByAccountNumber(
         account_Number: number,
         ) {
@@ -53,24 +63,22 @@ getAccountByAccountNumber(
                 },
             });
         }
-async sendMoney(
-    account_Number: number,
-    receiver: number,
-    amount: number,
-    balance: number,
-    dto: EditAccountDto,
-      ) {
+        async sendMoney(
+          AccountId: number,
+          userId: number,
+          amount: number,
+        ) {
           const senderAccount = await this.prisma.account.findUnique({
             where: {
-              id: account_Number,
-              },
-            });
+              id: AccountId,
+            },
+          });
         
           const receiverAccount = await this.prisma.account.findUnique({
             where: {
-              id: receiver,
+              id: userId,
             },
-            });
+          });
         
           if (!senderAccount || !receiverAccount) {
             throw new NotFoundException('Account not found');
@@ -80,52 +88,52 @@ async sendMoney(
             throw new ForbiddenException('Insufficient balance');
           }
         
-            // Deduct the amount from the sender's account balance
+          // Deduct the amount from the sender's account balance
           const updatedSenderAccount = await this.prisma.account.update({
             where: {
-              id: account_Number,
+              id: AccountId,
             },
             data: {
               balance: senderAccount.balance - amount,
             },
-            });
+          });
         
-            // Update the receiver's account balance
+          // Update the receiver's account balance
           const updatedReceiverAccount = await this.prisma.account.update({
             where: {
-              id: receiver,
+              id: userId,
             },
             data: {
               balance: receiverAccount.balance + amount,
             },
           });
-        
-            // Update other fields of the accounts if provided in the DTO
-          if (dto) {
-            await this.prisma.account.update({
-              where: {
-                id: account_Number,
-              },
-              data: {
-                ...dto,
-              },
-            });
-        
-            await this.prisma.account.update({
-              where: {
-                id: receiver,
-              },
-              data: {
-                ...dto,
-              },
-            });
-          }
+          
+          await this.transactionService.createTransaction(AccountId, {
+            receiver: userId,
+            amount: amount,
+            balance: amount,
+            sender: "",
+            status: 'successful',
+            type_of_transaction: 'Send',
+          });
+          // const transaction = await this.prisma.transaction.create({
+          //   data: {
+          //     AccountId,
+          //     amount,
+          //     receiver: userId,
+          //     status: 'pending',
+          //     type_of_transaction: 'Send',
+          //     balance: amount,
+          //   },
+          // });
         
           return {
             senderAccount: updatedSenderAccount,
             receiverAccount: updatedReceiverAccount,
+            // transaction
           };
         }
+        
  async editAccountById(
     userId: number, 
     AccountId: number,

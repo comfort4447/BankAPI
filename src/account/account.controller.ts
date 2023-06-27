@@ -27,7 +27,7 @@ export class AccountController {
     ) {}
 
 
-@Get()
+@Get('getAccounts')
 getAccounts(
     @GetUser('id') userId: number
     ) {
@@ -84,27 +84,22 @@ deleteAccountById(
     );
 }
 
-@Post(':senderAccountId/send-money/:receiverAccountId')
-async sendMoney(
-  @Param('account_Number', ParseIntPipe) account_Number: number,
-  @Param('receiver', ParseIntPipe) receiver: number,
-  @Param('balance', ParseIntPipe) balance: number,
-  @Body() dto: EditAccountDto,
-) {
-  const amount = dto.balance; 
+@Post(':AccountId/send-money/:userId')
+  async sendMoney(
+    @Param('AccountId', ParseIntPipe) AccountId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() dto: EditAccountDto,
+  ) {
+    const result = await this.Accountservice.sendMoney(
+        AccountId,
+        userId,
+        dto.balance,
+    );
 
-  const result = await this.Accountservice.sendMoney(
-    account_Number,
-    receiver,
-    amount,
-    balance,
-    dto,
-  );
-
-  return {
-    message: 'Money sent successfully',
-    senderAccount: result.senderAccount,
-    receiverAccount: result.receiverAccount,
-  };
-}
+    return {
+      message: 'Money sent successfully',
+      senderAccount: result.senderAccount,
+      receiverAccount: result.receiverAccount,
+    };
+  }
 }

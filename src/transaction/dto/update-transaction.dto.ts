@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator"
+import { Status, TypeOfTransaction } from '@prisma/client'
 
-export class SendTransactionDto {
+export class UpdateTransactionDto {
     @IsNumber()
     @IsNotEmpty()
     @IsOptional()
@@ -24,10 +25,10 @@ export class SendTransactionDto {
     @IsString()
     @IsNotEmpty()
     @IsOptional()
-    status?: string
+    status?: Status
 
     @IsString()
     @IsNotEmpty()
     @IsOptional()
-    type_of_transaction?: ['Deposit', 'Withdraw', 'send']
+    type_of_transaction?: TypeOfTransaction
 }
