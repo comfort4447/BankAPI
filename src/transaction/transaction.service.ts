@@ -9,40 +9,35 @@ export class TransactionService {
   async createTransaction(AccountId: number, dto: SendTransactionDto) {
     const transaction = await this.prisma.transaction.create({
       data: {
-        sender: "",
+        sender: 'sender',
         receiver: dto.receiver,
         amount: dto.amount,
         status: 'successful',
-        type_of_transaction: "Send",
+        type_of_transaction: 'Send',
         balance: dto.balance,
-        AccountId
-      }
-      // data: {
-      //   AccountId,
-      //   ...dto,
-      // },
+        AccountId // Connect the account using the AccountId
+      },
     });
+
     return transaction;
   }
 
-  // getTransactions(
-  //   AccountId: number
-  //   ) {
-  //   return this.prisma.transaction.findMany({
+  async getTransactionsByAccountId(accountId: number) {
+    return this.prisma.transaction.findMany({
+      where: {
+        AccountId: accountId,
+      },
+    });
+  }
+
+  // getTransactionById(AccountId: number, transactionId: number) {
+  //   return this.prisma.transaction.findFirst({
   //     where: {
+  //       id: transactionId,
   //       AccountId,
   //     },
   //   });
   // }
-
-  getTransactionById(AccountId: number, transactionId: number) {
-    return this.prisma.transaction.findFirst({
-      where: {
-        id: transactionId,
-        AccountId,
-      },
-    });
-  }
 
   async editTransactionById(
     AccountId: number,

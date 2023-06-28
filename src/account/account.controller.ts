@@ -19,87 +19,69 @@ import {
     EditAccountDto
 } from './dto';
 
-@UseGuards(JwtGuard)
 @Controller('Accounts')
 export class AccountController {
     constructor(
-        private Accountservice: Accountservice,
+        private accountService: Accountservice,
     ) {}
 
-
-@Get('getAccounts')
-getAccounts(
-    @GetUser('id') userId: number
-    ) {
-        return this.Accountservice.getAccounts(
-            userId,
-        );
+    @Get('getAccounts')
+    async getAccounts() {
+        return this.accountService.getAccounts();
     }
 
-@Get(':id')
-getAccountsById(
-    @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe)  AccountId: number, account_Number: number 
+    @UseGuards(JwtGuard) // Apply token authentication only for this method
+    @Get(':id')
+    getAccountsById(
+        @GetUser('id') userId: number,
+        // @Param('id', ParseIntPipe) accountId: number, 
+        // @Param('account_Number', ParseIntPipe) accountNumber: number 
     ) {
-        return this.Accountservice.getAccountById(
-            userId,
-            AccountId,
-        );
+        return this.accountService.getAccountById(userId);
     }
 
-@Post('addAccount')
-createAccount(
-    @GetUser('id') userId: number, 
-    @Body() dto: CreateAccountDto,
+    @UseGuards(JwtGuard) // Apply token authentication only for this method
+    @Post('addAccount')
+    createAccount(
+        @GetUser('id') userId: number, 
+        @Body() dto: CreateAccountDto,
     ) {
-        return this.Accountservice.createAccount(
-            userId,
-            dto,
-        );
+        return this.accountService.createAccount(userId, dto);
     }
 
-
-@Patch(':id') 
-editAccountById(
-    @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) AccountId: number,
-    @Body() dto: EditAccountDto,
+    @UseGuards(JwtGuard) // Apply token authentication only for this method
+    @Patch(':id') 
+    editAccountById(
+        @GetUser('id') userId: number,
+        @Param('id', ParseIntPipe) accountId: number,
+        @Body() dto: EditAccountDto,
     ) {
-        return this.Accountservice.editAccountById(
-            userId,
-            AccountId,
-            dto,
-        );
+        return this.accountService.editAccountById(userId, accountId, dto);
     }
 
-@HttpCode(HttpStatus.NO_CONTENT)
-@Delete(':id')
-deleteAccountById(
-    @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) AccountId: number,
-){
-    return this.Accountservice.deleteAccountById(
-        userId, 
-        AccountId
-    );
-}
+    @UseGuards(JwtGuard) // Apply token authentication only for this method
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Delete(':id')
+    deleteAccountById(
+        @GetUser('id') userId: number,
+        @Param('id', ParseIntPipe) accountId: number,
+    ) {
+        return this.accountService.deleteAccountById(userId, accountId);
+    }
 
-@Post(':AccountId/send-money/:userId')
-  async sendMoney(
-    @Param('AccountId', ParseIntPipe) AccountId: number,
-    @Param('userId', ParseIntPipe) userId: number,
-    @Body() dto: EditAccountDto,
-  ) {
-    const result = await this.Accountservice.sendMoney(
-        AccountId,
-        userId,
-        dto.balance,
-    );
+    @UseGuards(JwtGuard) // Apply token authentication only for this method
+    @Post(':AccountId/send-money/:userId')
+    async sendMoney(
+        @Param('AccountId', ParseIntPipe) accountId: number,
+        @Param('userId', ParseIntPipe) userId: number,
+        @Body() dto: EditAccountDto,
+    ) {
+        const result = await this.accountService.sendMoney(accountId, userId, dto.balance);
 
-    return {
-      message: 'Money sent successfully',
-      senderAccount: result.senderAccount,
-      receiverAccount: result.receiverAccount,
-    };
-  }
+        return {
+            message: 'Money sent successfully',
+            senderAccount: result.senderAccount,
+            receiverAccount: result.receiverAccount,
+        };
+    }
 }

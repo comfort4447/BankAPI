@@ -10,16 +10,12 @@ export class TransactionController {
         private TransactionService: TransactionService
     ) {}
 
-// @Get('Accounts/:AccountId')
-// getTransactions(
-//     // @GetUser('id') userId: number,
-//     @Param('id', ParseIntPipe)  AccountId: number 
-// ){
-//     return this.TransactionService.getTransactions(
-//         // userId,
-//         AccountId,
-//     );
-// }
+    @Get(':accountId/transactions')
+    getTransactionsByAccountId(
+      @Param('accountId', ParseIntPipe) accountId: number,
+    ) {
+      return this.TransactionService.getTransactionsByAccountId(accountId);
+    }
 
 // @Get(':id')
 // getTransactionsById(
@@ -31,15 +27,16 @@ export class TransactionController {
 //         transactionId,
 //     );
 // }
-@Post(':id')
+@Post(':AccountId') // Use 'accountId' instead of 'id'
 createTransaction(
-    @GetUser('id') AccountId: number,
-    @Body() dto: SendTransactionDto,
-){
-    return this.TransactionService.createTransaction(
-        AccountId,
-        dto,
-    )
+  @GetUser('id') userId: number, // Assuming you are using 'id' as the user ID decorator
+  @Param('accountId', ParseIntPipe) AccountId: number, // Use 'accountId' instead of 'id' and add ParseIntPipe to convert it to a number
+  @Body() dto: SendTransactionDto,
+) {
+  return this.TransactionService.createTransaction(
+    AccountId, // Pass the 'accountId' to the service method
+    dto,
+  );
 }
 
 // @Patch(':id')

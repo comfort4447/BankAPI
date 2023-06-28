@@ -31,24 +31,22 @@ async createAccount(
         return account;
     }
 
-
+    
 getAccounts(
-    userId: number
+    // userId: number
     ) {
         return this.prisma.account.findMany({
-            where: {
-                userId,
-            },
+            // where: {
+            //     userId,
+            // },
         });
     }
 
 getAccountById(
     userId: number, 
-    AccountId: number,
     ) {
         return this.prisma.account.findFirst({
             where: {
-                id: AccountId,
                 userId,
             },
         });
@@ -63,7 +61,7 @@ getAccountByAccountNumber(
                 },
             });
         }
-        async sendMoney(
+async sendMoney(
           AccountId: number,
           userId: number,
           amount: number,
@@ -177,4 +175,5 @@ getAccountByAccountNumber(
             }
         })
     }
+    
 }

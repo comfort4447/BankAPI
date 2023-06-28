@@ -52,4 +52,9 @@ export class UserController {
             userId, dto
         );
     }
+    @Get('getAllUsers')
+    async getAllUsers() {
+  return this.userService.getAllUsers();
+    }
+
     }
