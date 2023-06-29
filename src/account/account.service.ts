@@ -42,6 +42,16 @@ getAccounts(
         });
     }
 
+    getAccountsByUser(
+      userId: number
+      ) {
+          return this.prisma.account.findMany({
+              where: {
+                  userId,
+              },
+          });
+      }
+
 getAccountById(
     userId: number, 
     ) {

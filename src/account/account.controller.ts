@@ -30,6 +30,14 @@ export class AccountController {
         return this.accountService.getAccounts();
     }
 
+    @UseGuards(JwtGuard)
+    @Get('getAccountsByUser')
+    async getAccountsByUser(
+        @GetUser('id') userId: number,
+    ) {
+        return this.accountService.getAccountsByUser(userId);
+    }
+
     @UseGuards(JwtGuard) // Apply token authentication only for this method
     @Get(':id')
     getAccountsById(
