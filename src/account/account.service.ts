@@ -52,15 +52,17 @@ getAccounts(
           });
       }
 
-getAccountById(
-    userId: number, 
-    ) {
+      async getAccountById(accountId: number, userId: number) {
         return this.prisma.account.findFirst({
-            where: {
-                userId,
-            },
+          where: {
+            id: accountId,
+            userId: userId,
+          },
         });
-    }
+      }
+      
+      
+      
 
 getAccountByAccountNumber(
         account_Number: number,
@@ -141,6 +143,58 @@ async sendMoney(
             // transaction
           };
         }
+        async receiveMoney(receiverAccountId: number, senderAccountId: number, amount: number) {
+          const receiverAccount = await this.prisma.account.findUnique({
+            where: {
+              id: receiverAccountId,
+            },
+          });
+        
+          const senderAccount = await this.prisma.account.findUnique({
+            where: {
+              id: senderAccountId,
+            },
+          });
+        
+          if (!receiverAccount || !senderAccount) {
+            throw new NotFoundException('Account not found');
+          }
+        
+          // Deduct the amount from the sender's account balance
+          const updatedSenderAccount = await this.prisma.account.update({
+            where: {
+              id: senderAccountId,
+            },
+            data: {
+              balance: senderAccount.balance - amount,
+            },
+          });
+        
+          // Update the receiver's account balance
+          const updatedReceiverAccount = await this.prisma.account.update({
+            where: {
+              id: receiverAccountId,
+            },
+            data: {
+              balance: receiverAccount.balance + amount,
+            },
+          });
+        
+          await this.transactionService.createTransaction(receiverAccountId, {
+            receiver: receiverAccountId,
+            amount: amount,
+            balance: receiverAccount.balance + amount,
+            sender: "",
+            status: 'successful',
+            type_of_transaction: 'Deposit',
+          });
+        
+          return {
+            senderAccount: updatedSenderAccount,
+            receiverAccount: updatedReceiverAccount,
+          };
+        }
+        
         
  async editAccountById(
     userId: number, 

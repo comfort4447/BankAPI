@@ -21,6 +21,22 @@ export class TransactionService {
 
     return transaction;
   }
+  async createReceiveTransaction(AccountId: number, dto: SendTransactionDto) {
+    const transaction = await this.prisma.transaction.create({
+      data: {
+        sender: dto.sender,
+        receiver: dto.receiver,
+        amount: dto.amount,
+        status: 'successful',
+        type_of_transaction: 'Deposit',
+        balance: dto.balance + dto.amount,
+        AccountId // Connect the account using the AccountId
+      },
+    });
+  
+    return transaction;
+  }
+  
 
   async getTransactionsByAccountId(accountId: number) {
     return this.prisma.transaction.findMany({

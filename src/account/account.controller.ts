@@ -38,15 +38,17 @@ export class AccountController {
         return this.accountService.getAccountsByUser(userId);
     }
 
-    @UseGuards(JwtGuard) // Apply token authentication only for this method
-    @Get(':id')
-    getAccountsById(
-        @GetUser('id') userId: number,
-        // @Param('id', ParseIntPipe) accountId: number, 
-        // @Param('account_Number', ParseIntPipe) accountNumber: number 
-    ) {
-        return this.accountService.getAccountById(userId);
-    }
+    @UseGuards(JwtGuard)
+@Get(':accountId')
+getAccountById(
+  @GetUser('id') userId: number,
+  @Param('accountId', ParseIntPipe) accountId: number,
+) {
+  return this.accountService.getAccountById(accountId, userId);
+}
+
+    
+
 
     @UseGuards(JwtGuard) // Apply token authentication only for this method
     @Post('addAccount')
@@ -91,5 +93,20 @@ export class AccountController {
             senderAccount: result.senderAccount,
             receiverAccount: result.receiverAccount,
         };
+    }
+    @UseGuards(JwtGuard) // Apply token authentication only for this method
+    @Post(':receiverAccountId/receive-money/:senderAccountId')
+    async receiveMoney(
+    @Param('receiverAccountId', ParseIntPipe) receiverAccountId: number,
+    @Param('senderAccountId', ParseIntPipe) senderAccountId: number,
+    @Body() dto: EditAccountDto,
+    ) {
+    const result = await this.accountService.receiveMoney(receiverAccountId, senderAccountId, dto.balance);
+
+    return {
+        message: 'Money received successfully',
+        senderAccount: result.senderAccount,
+        receiverAccount: result.receiverAccount,
+    };
     }
 }
